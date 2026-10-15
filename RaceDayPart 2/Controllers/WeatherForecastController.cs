@@ -31,3 +31,14 @@ namespace RaceDayPart_2.Controllers
         }
     }
 }
+
+feat(api): implement RESTful controllers for RaceDay resources
+
+- Add AuthController for register, login and logout
+- Add ProfileController for user profile management
+- Add OrganisersController and ParticipantsController with role checks
+- Add EventsController, CategoriesController and WeatherController
+- Add RegistrationsController and ResultsController
+- Enforce ownership and role restrictions per Part 1 endpoint plan
+
+
