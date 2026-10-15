@@ -156,6 +156,22 @@ _NCrunch_*
 .*crunch*.local.xml
 nCrunchTemp_*
 
+# Local development secrets
+appsettings.Development.json
+secrets.json
+
+# Local environment files
+.env
+.env.*
+
+# Keep example environment configuration if used
+!.env.example
+
+# Test and coverage output
+TestResults/
+coverage/
+
+
 # MightyMoose
 *.mm.*
 AutoTest.Net/
