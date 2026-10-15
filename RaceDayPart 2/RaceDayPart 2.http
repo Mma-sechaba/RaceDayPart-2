@@ -4,3 +4,8 @@ GET {{RaceDayPart_2_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+test(http): add HTTP request file for manual endpoint testing
+
+- Provide sample requests for auth, events, registrations and results
+- Allow quick manual testing in Visual Studio or VS Code REST Client
