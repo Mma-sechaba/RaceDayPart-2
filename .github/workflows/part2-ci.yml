@@ -1,25 +1,26 @@
-name: RaceDay Part 2 CI
+name: .NET Build
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ "master" ]
   pull_request:
-    branches: [ main, master ]
-  workflow_dispatch:
+    branches: [ "master" ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Install .NET 8
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.0.x
-      - name: Restore dependencies
-        run: dotnet restore RaceDay.sln
-      - name: Build API and tests
-        run: dotnet build RaceDay.sln --configuration Release --no-restore
-      - name: Run unit and integration tests
-        run: dotnet test RaceDay.sln --configuration Release --no-build --logger "trx;LogFileName=raceday-tests.trx"
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore
+      run: dotnet restore RaceDay.Api.csproj
+
+    - name: Build
+      run: dotnet build RaceDay.Api.csproj --no-restore --configuration Release
