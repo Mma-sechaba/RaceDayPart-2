@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+chore: ignore local development settings
+
+- Exclude appsettings.Development.json to prevent committing secrets
+- Keep appsettings.json as the safe base configuration
+
