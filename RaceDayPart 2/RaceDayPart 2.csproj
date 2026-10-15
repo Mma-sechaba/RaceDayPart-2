@@ -12,3 +12,11 @@
   </ItemGroup>
 
 </Project>
+
+feat(api): configure ASP.NET Core Web API project and Swagger
+
+- Target net8.0 with nullable and implicit usings enabled
+- Register EF Core SQL Server, session and authentication services
+- Add custom SessionAuthenticationHandler scheme
+- Add Swagger/OpenAPI with ApiOperationDescriptions operation filter
+- Document HTTP 400/401/403/404/409 responses for endpoints
