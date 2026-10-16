@@ -71,6 +71,8 @@ Participants can create an account, browse events, enrol in events, manage their
 Do not commit database passwords, API keys or other secrets to the repository.
 
 ## Testing
+<img width="983" height="796" alt="image" src="https://github.com/user-attachments/assets/4db32758-5285-45c8-ad65-a5d80f158b20" />
+
 
 Automated tests are located in the `Tests/` directory. Run the tests using Visual Studio Test Explorer or the appropriate .NET test command.
 
