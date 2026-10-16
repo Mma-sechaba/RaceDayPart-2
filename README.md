@@ -51,6 +51,8 @@ Participants can create an account, browse events, enrol in events, manage their
 - `RaceDay.Api.csproj` – project dependencies and build settings.
 - `.github/workflows/` – GitHub Actions workflows.
 
+  THE CLASSES WE HAVE
+
 ## Prerequisites
 
 - Visual Studio with the ASP.NET and web development workload.
