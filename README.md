@@ -64,6 +64,8 @@ Participants can create an account, browse events, enrol in events, manage their
 
   And under properties i have launchSettings.json
 
+  and under raceday we have dependencies and connected services
+
 ## Prerequisites
 
 - Visual Studio with the ASP.NET and web development workload.
