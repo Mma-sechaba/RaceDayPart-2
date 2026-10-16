@@ -59,6 +59,7 @@ Participants can create an account, browse events, enrol in events, manage their
   -ProfileController.cs
   -RegistrationsController.cs
   -ResultsController.cs
+  -WeatherController.cs
 
 
   
