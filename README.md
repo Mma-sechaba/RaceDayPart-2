@@ -52,6 +52,7 @@ Participants can create an account, browse events, enrol in events, manage their
 - `.github/workflows/` – GitHub Actions workflows.
 
   THE CLASSES WE HAVE
+  -class AuthController.cs
 
 ## Prerequisites
 
