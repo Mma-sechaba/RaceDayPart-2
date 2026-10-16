@@ -25,6 +25,8 @@ Organisers manage events and categories, view event enrolments and record partic
 
 Participants can create an account, browse events, enrol in events, manage their profile and view their own enrolments and results, subject to the implemented functionality.
 
+###
+
 ## Technologies
 
 - C#
