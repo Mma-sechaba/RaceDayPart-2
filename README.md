@@ -82,7 +82,7 @@ GitHub Actions workflows are stored in `.github/workflows/`.
 
 **Build status:** Add a screenshot of a successful green workflow run here after verifying that the build and tests pass.
 
-**Workflow results:** [Insert link to the repository's Actions page.]
+**Workflow results:** [ https://github.com/Mma-sechaba/RaceDayPart-2.git ] 
 
 ## API Documentation
 
@@ -107,3 +107,8 @@ The implementation should remain consistent with the approved Part 1:
 ## AI Assistance Disclosure
 
 AI assistance was used to support documentation and development guidance. All suggestions must be reviewed, understood, tested and adapted by the student, who remains responsible for the submitted work.
+
+Chatgpt was used.
+
+
+
