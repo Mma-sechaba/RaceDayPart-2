@@ -62,7 +62,7 @@ Participants can create an account, browse events, enrol in events, manage their
   -WeatherController.cs
 
 
-  
+  And under properties i have launchSettings.json
 
 ## Prerequisites
 
