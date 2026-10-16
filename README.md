@@ -57,6 +57,10 @@ Participants can create an account, browse events, enrol in events, manage their
   -OrganisersController.cs
   -ParticipantsController.cs
   -ProfileController.cs
+  -RegistrationsController.cs
+
+
+  
 
 ## Prerequisites
 
