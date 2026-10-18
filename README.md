@@ -111,13 +111,13 @@ Swagger / OpenAPI can be used to explore and test the running API where configur
 
 ## Demonstration Video
 
-**Part 2 video:** [Insert your unlisted YouTube video link after recording your demonstration.]
+**Part 2 video:** [https://youtu.be/FKPBScoxJFg?si=0joPN4Bo0t59iSm5]
 
-The demonstration should cover the running API, database integration, authentication, role restrictions, key endpoints, automated tests and CI/CD.
+The demonstration cover the running API, database integration, authentication, role restrictions, key endpoints, automated tests and CI/CD.
 
 ## Part 1 Reference Documents
 
-The implementation should remain consistent with the approved Part 1:
+The implementation remain consistent with the approved Part 1:
 
 - Entity Relationship Diagram (ERD).
 - SQL Server database script.
