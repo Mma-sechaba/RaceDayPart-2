@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] · RaceDay</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/flows.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" asp-controller="Home" asp-action="Index"><span class="brand-mark">R</span><span>RACEDAY</span></a>
+        <nav aria-label="Main navigation">
+            <a asp-controller="Home" asp-action="Index">Discover</a>
+            @if (Context.Session.GetString("Role") == "Organiser")
+            {
+                <a asp-controller="Organiser" asp-action="Index">Organiser hub</a>
+                <a asp-controller="Organiser" asp-action="Results">Results</a>
+            }
+            @if (Context.Session.GetString("Role") == "Participant")
+            {
+                <a asp-controller="Participant" asp-action="MyEvents">My races</a>
+                <a asp-controller="Participant" asp-action="MyResults">Results</a>
+            }
+            @if (Context.Session.GetString("Role") is not null)
+            {
+                <a asp-controller="Account" asp-action="Profile">Profile</a>
+                <form asp-controller="Account" asp-action="Logout" method="post" class="nav-form"><button class="nav-link" type="submit">Sign out</button></form>
+            }
+            else
+            {
+                <a asp-controller="Account" asp-action="Login">Sign in</a>
+                <a class="nav-cta" asp-controller="Account" asp-action="Register">Join us</a>
+            }
+        </nav>
+    </header>
+    <main>
+        @if (TempData["Notice"] is string notice)
+        {
+            <div class="notice" role="status">@notice</div>
+        }
+        @RenderBody()
+    </main>
+    <footer><span>MADE FOR THE MOMENT YOU CROSS THE LINE.</span><span>© @DateTime.UtcNow.Year RaceDay</span></footer>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

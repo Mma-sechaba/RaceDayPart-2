@@ -1,0 +1,23 @@
+@model IReadOnlyList<RegistrationViewModel>
+@{
+    ViewData["Title"] = "My events";
+}
+<section class="page-hero compact"><p class="eyebrow">PARTICIPANT DASHBOARD</p><h1>Your race<br /><em>calendar.</em></h1><a class="button button-lime" asp-action="Index">Explore events ↗</a></section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">ON YOUR START LIST</p><h2>My events</h2></div><span class="count">@Model.Count.ToString("00") REGISTRATIONS</span></div>
+    @if (Model.Count == 0) { <div class="empty-state"><h3>Your next race is out there.</h3><p>Browse events and register to add them to your calendar.</p><a class="text-link" asp-action="Index">Explore events ↗</a></div> }
+    else
+    {
+        <div class="table-wrap"><table><thead><tr><th>Event</th><th>Category</th><th>Registered</th><th>Status</th><th></th></tr></thead><tbody>
+        @foreach (var registration in Model)
+        {
+            <tr><td><a class="text-link" asp-action="Details" asp-route-id="@registration.EventId">@registration.EventName</a></td><td>@registration.CategoryName</td><td>@registration.RegistrationDate.ToString("dd MMM yyyy")</td><td>@registration.Status</td><td>
+                @if (registration.Status != "Cancelled")
+                {
+                    <form asp-action="Cancel" method="post" data-confirm="Cancel this event registration?">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@registration.RegistrationId" /><button class="text-button danger" type="submit">Cancel</button></form>
+                }
+            </td></tr>
+        }
+        </tbody></table></div>
+    }
+</section>

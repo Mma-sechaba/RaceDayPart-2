@@ -1,0 +1,16 @@
+@model ResultFormViewModel
+@{
+    ViewData["Title"] = "Edit result";
+}
+<section class="form-page">
+    <p class="eyebrow">ORGANISER HUB</p><h1>Update a<br /><em>finish.</em></h1>
+    <form asp-action="SaveResult" method="post" class="stack-form">
+        @Html.AntiForgeryToken()
+        <input asp-for="ResultId" type="hidden" /><input asp-for="RegistrationId" type="hidden" />
+        <label asp-for="FinishTime">Finish time (hh:mm:ss)</label><input asp-for="FinishTime" type="text" required />
+        <label asp-for="Position"></label><input asp-for="Position" type="number" min="1" required />
+        <label asp-for="Status"></label><select asp-for="Status"><option>Finished</option><option>DNF</option><option>DQ</option></select>
+        <button class="button button-orange" type="submit">Save result</button>
+        <a class="text-link" asp-action="Results">← Back to results</a>
+    </form>
+</section>

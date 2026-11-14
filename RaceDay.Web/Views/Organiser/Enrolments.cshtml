@@ -1,0 +1,26 @@
+@model IReadOnlyList<RegistrationViewModel>
+@{
+    ViewData["Title"] = "Manage enrolments";
+}
+<section class="page-hero compact"><p class="eyebrow">ORGANISER HUB</p><h1>Meet the<br /><em>starting field.</em></h1><a class="text-link light-link" asp-action="Index">← Back to events</a></section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">REGISTRATION DESK</p><h2>Enrolments</h2></div><span class="count">@Model.Count.ToString("00") ENTRIES</span></div>
+    @if (ViewBag.ApiError is string error) { <p class="inline-error">@error</p> }
+    @if (Model.Count == 0) { <div class="empty-state"><h3>No enrolments yet.</h3><p>When participants sign up, they’ll show up here.</p></div> }
+    else
+    {
+        <div class="table-wrap"><table><thead><tr><th>Participant</th><th>Event</th><th>Category</th><th>Registered</th><th>Status</th></tr></thead><tbody>
+        @foreach (var registration in Model)
+        {
+            <tr><td>@registration.ParticipantName</td><td>@registration.EventName</td><td>@registration.CategoryName</td><td>@registration.RegistrationDate.ToString("dd MMM yyyy")</td><td>
+                <form asp-action="UpdateRegistration" method="post" class="table-form">
+                    @Html.AntiForgeryToken()<input type="hidden" name="RegistrationId" value="@registration.RegistrationId" />
+                    <select name="Status" aria-label="Status for @registration.ParticipantName">
+                        @foreach (var status in new[] { "Pending", "Confirmed", "Cancelled" }) { <option value="@status" selected="@(registration.Status == status)">@status</option> }
+                    </select><button class="text-link" type="submit">Save</button>
+                </form>
+            </td></tr>
+        }
+        </tbody></table></div>
+    }
+</section>

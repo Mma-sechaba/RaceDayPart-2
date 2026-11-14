@@ -1,0 +1,14 @@
+@model EventViewModel
+<article class="event-card">
+    <div class="event-art @((Model.EventType ?? "run").ToLowerInvariant())">
+        <partial name="_Banner" model="Model.BannerImageUrl" />
+        <partial name="_EventTypeBadge" model="Model.EventType" />
+        <span class="art-number">@Model.Distance.ToString("0.#")<small>KM</small></span><span class="art-swoosh"></span>
+    </div>
+    <div class="event-card-body">
+        <p class="event-date">@Model.Date.ToString("ddd, dd MMM yyyy")</p>
+        <h3>@Model.Name</h3>
+        <p class="muted">@Model.Location</p>
+        <a class="text-link" asp-controller="Home" asp-action="Details" asp-route-id="@Model.EventId">Event details <span aria-hidden="true">↗</span></a>
+    </div>
+</article>

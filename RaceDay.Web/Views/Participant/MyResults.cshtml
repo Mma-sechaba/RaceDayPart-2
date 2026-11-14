@@ -1,0 +1,19 @@
+@model IReadOnlyList<ResultViewModel>
+@{
+    ViewData["Title"] = "My results";
+}
+<section class="page-hero compact"><p class="eyebrow">PARTICIPANT DASHBOARD</p><h1>Every finish<br /><em>is a start.</em></h1></section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">YOUR PERSONAL BESTS</p><h2>Race results</h2></div><span class="count">@Model.Count.ToString("00") RESULTS</span></div>
+    @if (ViewBag.ApiError is string error) { <p class="inline-error">@error</p> }
+    @if (Model.Count == 0) { <div class="empty-state"><h3>Your results will find their way here.</h3><p>After your next race, come back to see your finish time and position.</p></div> }
+    else
+    {
+        <div class="table-wrap"><table><thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Finish time</th><th>Position of finishers</th><th>Status</th><th></th></tr></thead><tbody>
+        @foreach (var result in Model)
+        {
+            <tr><td>@result.EventName</td><td>@result.EventDate?.ToString("dd MMM yyyy")</td><td>@result.Category</td><td>@result.FinishTime</td><td>@result.PositionOfNFinishers</td><td>@result.Status</td><td><a class="text-link" asp-action="ResultDetails" asp-route-id="@result.ResultId">Details ↗</a></td></tr>
+        }
+        </tbody></table></div>
+    }
+</section>

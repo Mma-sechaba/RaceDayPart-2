@@ -1,0 +1,41 @@
+@model IReadOnlyList<CategoryViewModel>
+@{
+    ViewData["Title"] = "Manage categories";
+    var events = ViewBag.Events as List<EventViewModel> ?? [];
+}
+<section class="page-hero compact"><p class="eyebrow">ORGANISER HUB</p><h1>Every runner<br /><em>has a category.</em></h1><a class="text-link light-link" asp-action="Index">← Back to events</a></section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">YOUR EVENTS</p><h2>Categories</h2></div><span class="count">@Model.Count.ToString("00") CATEGORIES</span></div>
+    @if (ViewBag.ApiError is string error) { <p class="inline-error">@error</p> }
+    @if (events.Count > 0)
+    {
+        <form asp-action="CreateCategory" method="post" class="panel stack-form category-create-form">
+            @Html.AntiForgeryToken()
+            <h3>Add a category</h3>
+            <div class="form-two"><div><label for="event-id">Event</label><select id="event-id" name="EventId" required>@foreach (var e in events) { <option value="@e.EventId">@e.Name</option> }</select></div><div><label for="category-name">Category name</label><input id="category-name" name="Name" required maxlength="100" /></div></div>
+            <div class="form-two"><div><label for="min-age">Minimum age</label><input id="min-age" name="MinimumAge" type="number" min="0" max="120" value="0" required /></div><div><label for="max-age">Maximum age</label><input id="max-age" name="MaximumAge" type="number" min="0" max="120" value="120" required /></div></div>
+            <div class="form-two"><div><label for="category-distance">Distance (km)</label><input id="category-distance" name="Distance" type="number" min="0.01" step="0.01" required /></div><div><label for="category-price">Price</label><input id="category-price" name="Price" type="number" min="0" step="0.01" value="0" required /></div></div>
+            <div class="form-two"><div><label for="category-capacity">Capacity <span class="hint">(leave blank for unlimited)</span></label><input id="category-capacity" name="Capacity" type="number" min="1" /></div><div><button class="button button-orange" type="submit">Add category</button></div></div>
+        </form>
+    }
+    @if (Model.Count == 0) { <div class="empty-state"><h3>No categories yet.</h3><p>Create an event first, then add a category for participants.</p></div> }
+    <div class="category-admin-list">
+    @foreach (var c in Model)
+    {
+        <article class="panel category-admin-card">
+            <form asp-action="CreateCategory" method="post" class="stack-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="CategoryId" value="@c.CategoryId" /><input type="hidden" name="EventId" value="@c.EventId" />
+                <p class="eyebrow">@c.EventName</p>
+                <label>Name</label><input name="Name" value="@c.Name" required maxlength="100" />
+                <div class="form-two"><div><label>Minimum age</label><input name="MinimumAge" type="number" min="0" max="120" value="@c.MinimumAge" /></div><div><label>Maximum age</label><input name="MaximumAge" type="number" min="0" max="120" value="@c.MaximumAge" /></div></div>
+                <div class="form-two"><div><label>Distance (km)</label><input name="Distance" type="number" min="0.01" step="0.01" value="@c.Distance.ToString(System.Globalization.CultureInfo.InvariantCulture)" /></div><div><label>Price</label><input name="Price" type="number" min="0" step="0.01" value="@c.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" /></div></div>
+                <label>Capacity <span class="hint">(leave blank for unlimited)</span></label><input name="Capacity" type="number" min="1" value="@c.Capacity" />
+                <p class="muted">@c.EnrolledCount enrolled</p>
+                <button class="button button-orange" type="submit">Save category</button>
+            </form>
+            <form asp-action="DeleteCategory" method="post" data-confirm="Delete this category?"><input type="hidden" name="id" value="@c.CategoryId" /><button class="text-button danger" type="submit">Delete category</button></form>
+        </article>
+    }
+    </div>
+</section>

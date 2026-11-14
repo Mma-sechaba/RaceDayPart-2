@@ -1,0 +1,12 @@
+@model ResultViewModel
+@{
+    ViewData["Title"] = "Race result";
+}
+<section class="page-hero compact"><p class="eyebrow">YOUR RACE RESULT</p><h1>@Model.EventName</h1><p class="lead">@Model.EventDate?.ToString("dddd, dd MMMM yyyy")</p></section>
+<section class="section">
+    <div class="result-detail panel">
+        <p class="eyebrow">@Model.Category</p><strong class="result-time">@Model.FinishTime</strong>
+        <div class="result-stats"><div><span>POSITION OF FINISHERS</span><strong>@Model.PositionOfNFinishers</strong></div><div><span>STATUS</span><strong>@Model.Status</strong></div><div><span>FINISHERS</span><strong>@Model.TotalFinishers</strong></div></div>
+        <a class="text-link" asp-action="MyResults">← All my results</a>
+    </div>
+</section>

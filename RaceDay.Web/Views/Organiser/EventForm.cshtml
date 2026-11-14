@@ -1,0 +1,21 @@
+@model EventFormViewModel
+@{
+    ViewData["Title"] = Model.EventId == 0 ? "Create an event" : "Edit event";
+}
+<section class="form-page wide-form">
+    <p class="eyebrow">ORGANISER HUB</p><h1>@(Model.EventId == 0 ? "Build your" : "Shape your")<br /><em>race day.</em></h1>
+    <form asp-action="SaveEvent" method="post" enctype="multipart/form-data" class="stack-form" data-no-double-submit>
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="validation"></div>
+        <input asp-for="EventId" type="hidden" />
+        <label asp-for="Name"></label><input asp-for="Name" />
+        <label asp-for="Description"></label><textarea asp-for="Description" rows="3"></textarea>
+        <div class="form-two"><div><label asp-for="Date"></label><input asp-for="Date" type="date" /></div><div><label asp-for="Location"></label><input asp-for="Location" /></div></div>
+        <div class="form-two"><div><label asp-for="Distance">Distance (km)</label><input asp-for="Distance" type="number" min="0.01" step="0.1" /></div><div><label asp-for="EventType"></label><select asp-for="EventType"><option>Run</option><option>Walk</option><option>Cycle</option></select></div></div>
+        <label asp-for="BannerFile">Event banner <span class="hint">(optional image; max 5 MB)</span></label>
+        <input asp-for="BannerFile" type="file" accept="image/*" data-preview-image />
+        @if (!string.IsNullOrWhiteSpace(Model.BannerImageUrl)) { <img class="image-preview" src="@Model.BannerImageUrl" alt="Current event banner" /> }
+        <img id="image-preview" class="image-preview" alt="Selected event image preview" hidden />
+        <button class="button button-orange" type="submit">Save event</button>
+    </form>
+</section>

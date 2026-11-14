@@ -1,0 +1,58 @@
+@baseUrl = http://localhost:5184
+@organiserCookie = paste-organiser-session-cookie-here
+@participantCookie = paste-participant-session-cookie-here
+@eventId = 1
+@enrolmentId = 1
+@image = ./docs/ERD.png
+
+### Browse events with combined filters
+GET {{baseUrl}}/api/events?search=City&type=Run&location=Cape&from=2027-01-01&to=2027-12-31&upcomingOnly=true
+
+### Organiser dashboard
+GET {{baseUrl}}/api/events/mine
+Cookie: .RaceDay.Session={{organiserCookie}}
+
+### Upload an event banner
+POST {{baseUrl}}/api/events/{{eventId}}/banner
+Cookie: .RaceDay.Session={{organiserCookie}}
+Content-Type: multipart/form-data; boundary=RaceDayBoundary
+
+--RaceDayBoundary
+Content-Disposition: form-data; name="file"; filename="event-banner.png"
+Content-Type: image/png
+
+< {{image}}
+--RaceDayBoundary--
+
+### Upload the signed-in user's profile picture
+POST {{baseUrl}}/api/users/me/profile-picture
+Cookie: .RaceDay.Session={{participantCookie}}
+Content-Type: multipart/form-data; boundary=RaceDayBoundary
+
+--RaceDayBoundary
+Content-Disposition: form-data; name="file"; filename="profile-picture.png"
+Content-Type: image/png
+
+< {{image}}
+--RaceDayBoundary--
+
+### Change an enrolment status
+PUT {{baseUrl}}/api/enrolments/{{enrolmentId}}/status
+Cookie: .RaceDay.Session={{organiserCookie}}
+Content-Type: application/json
+
+{
+  "status": "Confirmed"
+}
+
+### List the signed-in participant's enrolments
+GET {{baseUrl}}/api/registrations/me
+Cookie: .RaceDay.Session={{participantCookie}}
+
+### View the signed-in participant's results
+GET {{baseUrl}}/api/results/me
+Cookie: .RaceDay.Session={{participantCookie}}
+
+### Verify an event with enrolments cannot be deleted
+DELETE {{baseUrl}}/api/events/{{eventId}}
+Cookie: .RaceDay.Session={{organiserCookie}}

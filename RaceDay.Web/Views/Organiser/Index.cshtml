@@ -1,0 +1,93 @@
+@model IReadOnlyList<EventViewModel>
+@{
+    ViewData["Title"] = "Organiser hub";
+    var registrations = ViewBag.Registrations as List<RegistrationViewModel> ?? [];
+}
+<section class="page-hero compact">
+    <p class="eyebrow">ORGANISER HUB</p><h1>Make it a day<br /><em>to remember.</em></h1>
+    <a class="button button-lime" asp-action="CreateEvent">Create an event <span aria-hidden="true">＋</span></a>
+</section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">YOUR LINEUP</p><h2>Events you’re running</h2></div><div class="dashboard-links"><a class="text-link" asp-action="Categories">Manage categories ↗</a><a class="text-link" asp-action="Enrolments">Manage enrolments ↗</a><a class="text-link" asp-action="Results">Manage results ↗</a></div><span class="count">@Model.Count.ToString("00") EVENTS</span></div>
+    @if (ViewBag.ApiError is string apiError) { <p class="inline-error">@apiError</p> }
+    @if (Model.Count == 0) { <div class="empty-state"><h3>Your next event starts here.</h3><p>Create an event to get things moving.</p></div> }
+    <div class="manage-grid">
+    @foreach (var item in Model)
+    {
+        <article class="manage-card panel">
+            <div class="manage-head"><div><p class="event-date">@item.Date.ToString("ddd, dd MMM yyyy") · @item.Location</p><h3>@item.Name</h3></div><partial name="_StatusBadge" model="item.Status" /></div>
+            <p>@item.Distance.ToString("0.#") km · @item.EventType</p>
+            @if (!string.IsNullOrWhiteSpace(item.BannerImageUrl)) { <img class="event-banner-thumb" src="@item.BannerImageUrl" alt="Banner for @item.Name" /> }
+            <div class="action-row">
+                <a class="text-link" asp-action="EditEvent" asp-route-id="@item.EventId">Edit event ↗</a>
+                <form asp-action="DeleteEvent" method="post" data-confirm="Delete this event?"><input type="hidden" name="id" value="@item.EventId" /><button class="text-button danger" type="submit">Delete</button></form>
+            </div>
+            <form asp-action="CreateCategory" method="post" class="inline-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="EventId" value="@item.EventId" />
+                <label class="sr-only" for="category-@item.EventId">Category name</label><input id="category-@item.EventId" name="Name" placeholder="Category name" required maxlength="100" />
+                <input name="MinimumAge" type="number" min="0" max="120" value="0" aria-label="Minimum age" />
+                <input name="MaximumAge" type="number" min="0" max="120" value="120" aria-label="Maximum age" />
+                <input name="Distance" type="number" min="0.01" step="0.1" value="@item.Distance.ToString(System.Globalization.CultureInfo.InvariantCulture)" aria-label="Category distance in kilometres" />
+                <input name="Price" type="number" min="0" step="0.01" value="0" aria-label="Category price" />
+                <input name="Capacity" type="number" min="1" placeholder="Unlimited" aria-label="Category capacity" />
+                <button class="button button-small button-orange" type="submit">Add category</button>
+            </form>
+            @if (item.Categories.Count > 0)
+            {
+                <div class="category-list category-manage-list">
+                @foreach (var c in item.Categories)
+                {
+                    <div class="category-row">
+                        <form asp-action="CreateCategory" method="post" class="inline-form category-edit-form">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="CategoryId" value="@c.CategoryId" /><input type="hidden" name="EventId" value="@item.EventId" />
+                            <input name="Name" value="@c.Name" aria-label="Category name" required />
+                            <input name="MinimumAge" type="number" min="0" max="120" value="@c.MinimumAge" aria-label="Minimum age" />
+                            <input name="MaximumAge" type="number" min="0" max="120" value="@c.MaximumAge" aria-label="Maximum age" />
+                            <input name="Distance" type="number" min="0.01" step="0.1" value="@c.Distance.ToString(System.Globalization.CultureInfo.InvariantCulture)" aria-label="Distance" />
+                            <input name="Price" type="number" min="0" step="0.01" value="@c.Price.ToString(System.Globalization.CultureInfo.InvariantCulture)" aria-label="Price" />
+                            <input name="Capacity" type="number" min="1" value="@c.Capacity" placeholder="Unlimited" aria-label="Capacity" />
+                            <button class="text-link" type="submit">Save</button>
+                        </form>
+                        <form asp-action="DeleteCategory" method="post" data-confirm="Delete this category?"><input type="hidden" name="id" value="@c.CategoryId" /><button class="text-button danger" type="submit">Delete</button></form>
+                    </div>
+                }
+                </div>
+            }
+        </article>
+    }
+    </div>
+</section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">KEEP EVERYONE IN THE LOOP</p><h2>Weather alerts</h2></div></div>
+    @if (Model.Count == 0) { <p class="muted">Create an event before publishing an alert.</p> }
+    else
+    {
+        <form asp-action="CreateWeatherAlert" method="post" class="panel stack-form alert-form">
+            @Html.AntiForgeryToken()
+            <label for="alert-event">Event</label><select id="alert-event" name="EventId" required>@foreach (var item in Model) { <option value="@item.EventId">@item.Name</option> }</select>
+            <div class="form-two"><div><label for="alert-type">Alert type</label><input id="alert-type" name="AlertType" maxlength="100" required placeholder="Weather update" /></div><div><label for="alert-message">Message</label><input id="alert-message" name="Message" maxlength="100" required placeholder="Please bring a rain jacket" /></div></div>
+            <button class="button button-orange" type="submit">Publish alert</button>
+        </form>
+    }
+</section>
+<section class="section section-tint">
+    <div class="section-heading"><div><p class="eyebrow">THE FIELD</p><h2>Registrations</h2></div><span class="count">@registrations.Count.ToString("00") ENTRIES</span></div>
+    @if (ViewBag.RegistrationError is string registrationError) { <p class="inline-error">@registrationError</p> }
+    @if (registrations.Count == 0) { <p class="muted">Registrations for your events will appear here.</p> }
+    else
+    {
+        <div class="table-wrap"><table><thead><tr><th>Participant</th><th>Event</th><th>Category</th><th>Status</th><th>Manage</th><th>Result</th></tr></thead><tbody>
+        @foreach (var registration in registrations)
+        {
+            <tr>
+                <td>@registration.ParticipantName<br /><small>@registration.Email</small></td><td>@registration.EventName</td><td>@registration.CategoryName</td>
+                <td>@registration.Status</td>
+                <td><form asp-action="UpdateRegistration" method="post" class="table-form">@Html.AntiForgeryToken()<input type="hidden" name="RegistrationId" value="@registration.RegistrationId" /><select name="Status" aria-label="Registration status"><option>Pending</option><option>Confirmed</option><option>Cancelled</option></select><button class="text-link" type="submit">Save</button></form></td>
+                <td><form asp-action="AddResult" method="post" class="table-form">@Html.AntiForgeryToken()<input type="hidden" name="RegistrationId" value="@registration.RegistrationId" /><input name="FinishTime" type="text" placeholder="hh:mm:ss" aria-label="Finish time" required /><input name="Position" type="number" min="1" value="1" aria-label="Position" required /><button class="text-link" type="submit">Record</button></form></td>
+            </tr>
+        }
+        </tbody></table></div>
+    }
+</section>

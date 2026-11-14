@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="760" viewBox="0 0 1240 760" role="img" aria-labelledby="title description">
+  <title id="title">RaceDay Part 2 entity relationship diagram</title>
+  <desc id="description">RaceDay database entities and relationships. Yellow rows indicate Part 2 additions.</desc>
+  <defs>
+    <style>
+      text { font-family: Segoe UI, Arial, sans-serif; fill: #17233c; }
+      .entity { fill: #fff; stroke: #17233c; stroke-width: 2; }
+      .header { fill: #17233c; }
+      .headerText { fill: #fff; font-size: 17px; font-weight: 700; }
+      .field { font-size: 14px; }
+      .key { font-size: 11px; font-weight: 700; fill: #d65b19; }
+      .new { fill: #fff1bd; }
+      .line { fill: none; stroke: #46536b; stroke-width: 2; }
+      .cardinality { font-size: 12px; font-weight: 600; fill: #46536b; }
+    </style>
+  </defs>
+  <rect width="1240" height="760" fill="#f7f8fb"/>
+  <text x="32" y="38" font-size="25" font-weight="700">RaceDay database — Part 2</text>
+  <rect x="880" y="20" width="18" height="18" class="new" stroke="#d6a11d"/>
+  <text x="907" y="34" font-size="13">New / updated in Part 2</text>
+
+  <path class="line" d="M250 145 H325"/>
+  <text class="cardinality" x="257" y="135">1 : many</text>
+  <path class="line" d="M650 145 H720"/>
+  <text class="cardinality" x="654" y="135">1 : many</text>
+  <path class="line" d="M847 260 V300 H675 L650 340"/>
+  <text class="cardinality" x="755" y="294">1 : many</text>
+  <path class="line" d="M475 260 V340"/>
+  <text class="cardinality" x="483" y="320">1 : many</text>
+  <path class="line" d="M475 260 V290 H290 V650 H325"/>
+  <text class="cardinality" x="296" y="640">1 : many</text>
+  <path class="line" d="M250 438 H325"/>
+  <text class="cardinality" x="257" y="428">1 : many</text>
+  <path class="line" d="M650 438 H720"/>
+  <text class="cardinality" x="654" y="428">1 : 0..1</text>
+
+  <g transform="translate(30 70)">
+    <rect class="entity" width="220" height="190" rx="4"/>
+    <path class="header" d="M4 0 H216 Q220 0 220 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="110" y="25" text-anchor="middle">EVENT_ORGANISER</text>
+    <text class="key" x="12" y="61">PK</text><text class="field" x="48" y="61">OrganiserId</text>
+    <text class="field" x="12" y="88">FirstName</text>
+    <text class="field" x="12" y="115">LastName</text>
+    <text class="field" x="12" y="142">Email</text>
+    <text class="field" x="12" y="169">Password</text>
+  </g>
+
+  <g transform="translate(325 70)">
+    <rect class="entity" width="325" height="190" rx="4"/>
+    <path class="header" d="M4 0 H321 Q325 0 325 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="162" y="25" text-anchor="middle">EVENT</text>
+    <text class="key" x="12" y="61">PK</text><text class="field" x="48" y="61">EventId</text>
+    <text class="key" x="12" y="88">FK</text><text class="field" x="48" y="88">OrganiserId</text>
+    <text class="field" x="12" y="115">EventName · EventDate · Location</text>
+    <rect class="new" x="1" y="124" width="323" height="24"/>
+    <text class="field" x="12" y="142">DistanceKm · EventType</text>
+    <rect class="new" x="1" y="148" width="323" height="24"/>
+    <text class="field" x="12" y="166">BannerImageUrl</text>
+    <text class="field" x="12" y="187">Status · Description</text>
+  </g>
+
+  <g transform="translate(720 70)">
+    <rect class="entity" width="255" height="190" rx="4"/>
+    <path class="header" d="M4 0 H251 Q255 0 255 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="127" y="25" text-anchor="middle">CATEGORY</text>
+    <text class="key" x="12" y="61">PK</text><text class="field" x="48" y="61">CategoryId</text>
+    <text class="key" x="12" y="88">FK</text><text class="field" x="48" y="88">EventId</text>
+    <text class="field" x="12" y="115">CategoryName · Age range</text>
+    <rect class="new" x="1" y="124" width="253" height="24"/>
+    <text class="field" x="12" y="142">Distance · Price</text>
+    <rect class="new" x="1" y="148" width="253" height="24"/>
+    <text class="field" x="12" y="166">Capacity</text>
+  </g>
+
+  <g transform="translate(30 340)">
+    <rect class="entity" width="220" height="190" rx="4"/>
+    <path class="header" d="M4 0 H216 Q220 0 220 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="110" y="25" text-anchor="middle">PARTICIPANT</text>
+    <text class="key" x="12" y="61">PK</text><text class="field" x="48" y="61">ParticipantId</text>
+    <text class="field" x="12" y="88">FirstName · LastName</text>
+    <text class="field" x="12" y="115">Email · DateOfBirth</text>
+    <rect class="new" x="1" y="124" width="218" height="24"/>
+    <text class="field" x="12" y="142">ProfilePictureUrl</text>
+    <text class="field" x="12" y="169">Phone · Password</text>
+  </g>
+
+  <g transform="translate(325 340)">
+    <rect class="entity" width="325" height="190" rx="4"/>
+    <path class="header" d="M4 0 H321 Q325 0 325 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="162" y="25" text-anchor="middle">REGISTRATION</text>
+    <text class="key" x="12" y="61">PK</text><text class="field" x="48" y="61">RegistrationId</text>
+    <text class="key" x="12" y="88">FK</text><text class="field" x="48" y="88">ParticipantId · EventId · CategoryId</text>
+    <text class="field" x="12" y="115">RegistrationDate</text>
+    <text class="field" x="12" y="142">Status (Pending / Confirmed / Cancelled)</text>
+    <text class="field" x="12" y="169">Unique: ParticipantId + EventId</text>
+  </g>
+
+  <g transform="translate(720 340)">
+    <rect class="entity" width="255" height="190" rx="4"/>
+    <path class="header" d="M4 0 H251 Q255 0 255 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="127" y="25" text-anchor="middle">RESULT</text>
+    <text class="key" x="12" y="61">PK</text><text class="field" x="48" y="61">ResultId</text>
+    <text class="key" x="12" y="88">FK</text><text class="field" x="48" y="88">RegistrationId (unique)</text>
+    <text class="field" x="12" y="115">FinishTime</text>
+    <text class="field" x="12" y="142">Position</text>
+    <rect class="new" x="1" y="148" width="253" height="24"/>
+    <text class="field" x="12" y="166">Status (Finished / DNF / DQ)</text>
+  </g>
+
+  <g transform="translate(325 590)">
+    <rect class="entity" width="325" height="140" rx="4"/>
+    <path class="header" d="M4 0 H321 Q325 0 325 4 V38 H0 V4 Q0 0 4 0Z"/>
+    <text class="headerText" x="162" y="25" text-anchor="middle">WEATHER</text>
+    <text class="key" x="12" y="63">PK</text><text class="field" x="48" y="63">WeatherId</text>
+    <text class="key" x="12" y="90">FK</text><text class="field" x="48" y="90">EventId</text>
+    <text class="field" x="12" y="117">WeatherDate · Temperature · Condition · WindSpeed</text>
+  </g>
+</svg>

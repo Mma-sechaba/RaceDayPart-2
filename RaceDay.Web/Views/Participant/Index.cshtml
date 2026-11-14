@@ -1,0 +1,72 @@
+@model IReadOnlyList<EventViewModel>
+@{
+    ViewData["Title"] = "My races";
+    var results = ViewBag.Results as List<ResultViewModel> ?? [];
+}
+<section class="page-hero compact">
+    <p class="eyebrow">PARTICIPANT DASHBOARD</p><h1>Your next<br /><em>finish line.</em></h1>
+</section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">PICK YOUR CHALLENGE</p><h2>Upcoming events</h2></div></div>
+    <form asp-action="Index" method="get" class="event-filter panel">
+        <label for="event-search">Search</label><input id="event-search" name="search" value="@ViewBag.Search" placeholder="Event or description" />
+        <label for="event-type">Type</label><select id="event-type" name="type"><option value="">All types</option><option selected="@(ViewBag.Type as string == "Run")">Run</option><option selected="@(ViewBag.Type as string == "Walk")">Walk</option><option selected="@(ViewBag.Type as string == "Cycle")">Cycle</option></select>
+        <label for="event-location">Location</label><input id="event-location" name="location" value="@ViewBag.Location" placeholder="City or venue" />
+        <label for="event-from">From</label><input id="event-from" name="from" type="date" value="@ViewBag.From" />
+        <label for="event-to">To</label><input id="event-to" name="to" type="date" value="@ViewBag.To" />
+        <label for="upcoming-only">Date scope</label><select id="upcoming-only" name="upcomingOnly"><option value="true" selected="@(ViewBag.UpcomingOnly is true)">Upcoming only</option><option value="false" selected="@(ViewBag.UpcomingOnly is false)">All dates</option></select>
+        <button class="button button-small button-orange" type="submit">Filter events</button>
+    </form>
+    @if (ViewBag.ApiError is string error) { <p class="inline-error">@error</p> }
+    @if (Model.Count == 0) { <p class="muted">No events are available right now.</p> }
+    <div class="event-grid">
+    @foreach (var item in Model)
+    {
+        <article class="event-card">
+            <div class="event-art @item.EventType.ToLowerInvariant()">
+                <partial name="_Banner" model="item.BannerImageUrl" />
+                <partial name="_EventTypeBadge" model="item.EventType" /><span class="art-number">@item.Distance.ToString("0.#")<small>KM</small></span><span class="art-swoosh"></span>
+            </div>
+            <div class="event-card-body"><p class="event-date">@item.Date.ToString("ddd, dd MMM yyyy")</p><h3>@item.Name</h3><p class="muted">@item.Location</p>
+                <a class="text-link" asp-action="Details" asp-route-id="@item.EventId">Details and categories ↗</a>
+                @if (item.Categories.Count > 0)
+                {
+                    <form asp-action="Register" method="post" class="stack-form compact-form">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="EventId" value="@item.EventId" />
+                        <label class="sr-only" for="cat-@item.EventId">Race category</label>
+                        <select name="CategoryId" id="cat-@item.EventId" required><option value="">Select category</option>@foreach (var category in item.Categories) { <option value="@category.CategoryId">@category.Name · @category.Distance.ToString("0.#") km</option> }</select>
+                        <button class="button button-small button-orange" type="submit">Register</button>
+                    </form>
+                }
+            </div>
+        </article>
+    }
+    </div>
+</section>
+<section class="section">
+    <div class="section-heading"><div><p class="eyebrow">YOUR RACE CALENDAR</p><h2>My registrations</h2></div></div>
+    @{
+        var registrations = ViewBag.Registrations as List<RegistrationViewModel> ?? [];
+    }
+    @if (registrations.Count == 0) { <p class="muted">Your registered events will appear here.</p> }
+    else
+    {
+        <div class="table-wrap"><table><thead><tr><th>Event</th><th>Category</th><th>Status</th><th></th></tr></thead><tbody>
+        @foreach (var registration in registrations)
+        {
+            <tr><td>@registration.EventName</td><td>@registration.CategoryName</td><td>@registration.Status</td><td><form asp-action="Cancel" method="post" data-confirm="Cancel this event registration?">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@registration.RegistrationId" /><button class="text-button danger" type="submit">Cancel registration</button></form></td></tr>
+        }
+        </tbody></table></div>
+    }
+</section>
+<section class="section section-tint">
+    <div class="section-heading"><div><p class="eyebrow">YOUR PERSONAL BESTS</p><h2>Race results</h2></div><span class="count">@results.Count.ToString("00") RESULTS</span></div>
+    @if (results.Count == 0) { <p class="muted">Your results will show up here after race day.</p> }
+    else
+    {
+        <div class="table-wrap"><table><thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Finish time</th><th>Position of finishers</th></tr></thead><tbody>
+        @foreach (var result in results) { <tr><td>@result.EventName</td><td>@result.EventDate?.ToString("dd MMM yyyy")</td><td>@result.Category</td><td>@result.FinishTime</td><td>@result.PositionOfNFinishers</td></tr> }
+        </tbody></table></div>
+    }
+</section>

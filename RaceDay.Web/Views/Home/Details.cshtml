@@ -1,0 +1,44 @@
+@model EventViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+<section class="page-hero compact">
+    <p class="eyebrow">@Model.EventType · @Model.Date.ToString("dd MMM yyyy")</p>
+    <h1>@Model.Name</h1>
+    <p class="lead">@Model.Location · @Model.Distance.ToString("0.#") km</p>
+</section>
+<section class="section detail-grid">
+    <div>
+        <p class="eyebrow">THE DETAILS</p>
+        <h2>Ready, set, go.</h2>
+        <p>@(Model.Description ?? "A great day out starts here. Pick your category and get ready to make it count.")</p>
+        @if (Model.Categories.Count > 0)
+        {
+            <h3 class="subheading">Categories</h3>
+            <div class="category-list">
+                @foreach (var category in Model.Categories)
+                {
+                    <div class="category-row"><strong>@category.Name</strong><span>@category.MinimumAge–@category.MaximumAge years</span><span>@category.Distance.ToString("0.#") km</span></div>
+                }
+            </div>
+        }
+        @if (Context.Session.GetString("Role") == "Participant")
+        {
+            <form asp-controller="Participant" asp-action="Register" method="post" class="stack-form">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="EventId" value="@Model.EventId" />
+                <label for="CategoryId">Choose your category</label>
+                <select id="CategoryId" name="CategoryId" required>
+                    <option value="">Select a category</option>
+                    @foreach (var category in Model.Categories) { <option value="@category.CategoryId">@category.Name · @category.Distance.ToString("0.#") km</option> }
+                </select>
+                <button class="button button-orange" type="submit">Register for this race</button>
+            </form>
+        }
+        else if (Context.Session.GetString("Role") is null)
+        {
+            <a class="button button-orange" asp-controller="Account" asp-action="Login">Sign in to register</a>
+        }
+    </div>
+    <aside class="detail-note"><span class="eyebrow">RACE DAY</span><strong>@Model.Date.ToString("dd")</strong><span>@Model.Date.ToString("MMMM yyyy")</span><hr /><span>@Model.Location</span><span>@Model.Distance.ToString("0.#") KM · @Model.EventType</span></aside>
+</section>

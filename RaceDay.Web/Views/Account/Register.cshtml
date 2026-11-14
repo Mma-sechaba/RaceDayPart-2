@@ -1,0 +1,20 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Join RaceDay";
+}
+<section class="form-page wide-form">
+    <p class="eyebrow">FIND YOUR PACE</p><h1>Your next story<br /><em>starts here.</em></h1>
+    <form asp-action="Register" method="post" class="stack-form" data-no-double-submit>
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="validation"></div>
+        <div class="form-two"><div><label asp-for="FirstName"></label><input asp-for="FirstName" autocomplete="given-name" /></div><div><label asp-for="LastName"></label><input asp-for="LastName" autocomplete="family-name" /></div></div>
+        <label asp-for="Email"></label><input asp-for="Email" autocomplete="email" />
+        <label asp-for="Password">Password <span class="hint">(at least 8 characters)</span></label><input asp-for="Password" autocomplete="new-password" />
+        <label asp-for="Role">I am joining as</label><select asp-for="Role"><option value="Participant">Participant</option><option value="Organiser">Organiser</option></select>
+        <div id="birth-date-field"><label asp-for="DateOfBirth"></label><input asp-for="DateOfBirth" /></div>
+        <label asp-for="Phone"></label><input asp-for="Phone" autocomplete="tel" />
+        <button class="button button-orange" type="submit">Create account</button>
+    </form>
+    <p class="form-foot">Already have an account? <a asp-action="Login">Sign in</a></p>
+</section>
+@section Scripts { <script>document.getElementById("Role").addEventListener("change", function () { document.getElementById("birth-date-field").hidden = this.value !== "Participant"; });</script> }
