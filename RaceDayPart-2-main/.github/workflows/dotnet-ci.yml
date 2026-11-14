@@ -1,0 +1,34 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build-test-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build solution
+        run: dotnet build RaceDay.sln --configuration Release
+
+      - name: Build MVC web application
+        run: dotnet build RaceDay.Web/RaceDay.Web.csproj --configuration Release
+
+      - name: Run API tests
+        run: dotnet test Tests/RaceDay.Api.Tests.csproj --configuration Release --no-build
+
+      - name: Build API image
+        run: docker build --file Dockerfile --tag raceday-api:ci .
+
+      - name: Build web image
+        run: docker build --file RaceDay.Web/Dockerfile --tag raceday-web:ci RaceDay.Web
