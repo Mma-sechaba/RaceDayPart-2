@@ -1,118 +1,22 @@
-name: Part 1 Validation
+name: CI
 
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ main, master ]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
-  validate-part1:
-    name: Validate Part 1 Repository
+  build-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Check required folders
-        shell: bash
-        run: |
-          set -e
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x   # CHANGE to match your TargetFramework (net8.0 = 8.0.x, net9.0 = 9.0.x)
 
-          if [ ! -d "docs" ]; then
-            echo "ERROR: docs folder is missing."
-            exit 1
-          fi
-
-          if [ ! -d ".github/workflows" ]; then
-            echo "ERROR: .github/workflows folder is missing."
-            exit 1
-          fi
-
-          echo "Required folders are present."
-
-      - name: Check required Part 1 files
-        shell: bash
-        run: |
-          set -e
-
-          test -f "README.md" || {
-            echo "ERROR: README.md is missing."
-            exit 1
-          }
-
-          test -f "docs/API-Endpoint-Plan.md" || {
-            echo "ERROR: docs/API-Endpoint-Plan.md is missing."
-            exit 1
-          }
-
-          test -f "docs/database.sql" || {
-            echo "ERROR: docs/database.sql is missing."
-            exit 1
-          }
-
-          if [ -f "docs/ERD.pdf" ] || [ -f "docs/ERD.png" ] || [ -f "docs/ERD.svg" ]; then
-            echo "ERD file found."
-          else
-            echo "ERROR: docs/ERD.pdf, docs/ERD.png, or docs/ERD.svg is missing."
-            exit 1
-          fi
-
-          echo "All required Part 1 files are present."
-
-      - name: Validate endpoint plan headings
-        shell: bash
-        run: |
-          set -e
-
-          PLAN="docs/API-Endpoint-Plan.md"
-
-          grep -qi "Method" "$PLAN" || {
-            echo "ERROR: Method column was not found in the endpoint plan."
-            exit 1
-          }
-
-          grep -qi "Route" "$PLAN" || {
-            echo "ERROR: Route column was not found in the endpoint plan."
-            exit 1
-          }
-
-          grep -qi "Purpose" "$PLAN" || {
-            echo "ERROR: Purpose column was not found in the endpoint plan."
-            exit 1
-          }
-
-          grep -qi "Access" "$PLAN" || {
-            echo "ERROR: Access column was not found in the endpoint plan."
-            exit 1
-          }
-
-          echo "Endpoint plan contains the current method, route, access, and purpose columns."
-
-      - name: Validate SQL script
-        shell: bash
-        run: |
-          set -e
-
-          SQL="docs/database.sql"
-
-          grep -qi "CREATE TABLE" "$SQL" || {
-            echo "ERROR: No CREATE TABLE statement found in database.sql."
-            exit 1
-          }
-
-          grep -qi "INSERT INTO" "$SQL" || {
-            echo "ERROR: No INSERT INTO statement found in database.sql."
-            exit 1
-          }
-
-          echo "SQL script contains CREATE TABLE and INSERT INTO statements."
-
-      - name: Validation successful
-        run: echo "RaceDay Part 1 repository validation completed successfully."
+      - run: dotnet restore RaceDay.sln   # CHANGE if your .sln has a different name
+      - run: dotnet build RaceDay.sln --no-restore -c Release
+      - run: dotnet test RaceDay.sln --no-build -c Release
